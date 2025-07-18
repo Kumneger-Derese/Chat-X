@@ -9,6 +9,7 @@ import {
 import { useAuthStore } from '@/store/authStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { UserResponse } from '@/types';
+import type { AxiosError } from 'axios';
 
 // Custom hook for user registration
 // It uses the registerUser API function and updates the auth store with the user credentials
@@ -26,9 +27,9 @@ const useRegisterUser = () => {
 
       toast.success('User registered.');
     },
-    onError: (error) => {
+    onError: (error : AxiosError<{message:string}>) => {
       console.log({ error });
-      toast.error(error?.response?.data.message);
+      toast.error(error?.response?.data.message||'Failed to register user.');
     },
   });
 };
@@ -47,8 +48,8 @@ const useLoginUser = () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
       toast.success('User logged in.');
     },
-    onError: (error) => {
-      toast.error(error?.response?.data.message);
+    onError: (error : AxiosError<{message:string}>) => {
+      toast.error(error?.response?.data.message || 'Failed to log in user.');
     },
   });
 };
@@ -66,9 +67,9 @@ const useUpdateUser = () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
       toast.success('User data updated.');
     },
-    onError: (error) => {
+    onError: (error : AxiosError<{message:string}>) => {
       console.log({ error });
-      toast.error(error?.response?.data.message);
+      toast.error(error?.response?.data.message || 'Failed to update user data.');
     },
   });
 };
@@ -82,9 +83,9 @@ const useDeleteAcount = () => {
       toast.success(data.message);
       queryClient.removeQueries({ queryKey: ['user'] });
     },
-    onError: (error) => {
+    onError: (error : AxiosError<{message:string}>) => {
       console.log('useDeleteAcount: ', { error });
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message || 'Failed to delete account.');
     },
   });
 };

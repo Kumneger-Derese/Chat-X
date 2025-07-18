@@ -8,6 +8,7 @@ import {
 } from '@/api/conversationApi';
 import { useConversation } from '@/store/useConversation';
 import toast from 'react-hot-toast';
+import type { AxiosError } from 'axios';
 
 // get users for sidebar
 const useGetConversation = () => {
@@ -50,8 +51,8 @@ const useSendMessage = () => {
 
   return useMutation({
     mutationFn: sendMessage,
-    onError: (error) => {
-      toast.error(error?.response?.data?.message);
+    onError: (error: AxiosError<{ message: string }>) => {
+      toast.error(error?.response?.data?.message ||'Failed to send message.');
     },
     onSuccess: (data) => {
       setMessages([...messages, data]);

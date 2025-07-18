@@ -18,7 +18,7 @@ const useListenMessages = () => {
     }
 
     return () => {
-      if (socket) socket?.off('newMessage');
+      if (socket) socket.off('newMessage');
     };
   }, [socket, messages, setMessages]);
 };
